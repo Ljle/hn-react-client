@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Icon} from 'react-fa'
 import './App.css'
 
 const largeColumn = {width: '40%'}
@@ -19,7 +20,12 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {results: null, searchKey: '', searchTerm: DEFAULT_QUERY}
+    this.state = {
+      results: null,
+      searchKey: '',
+      searchTerm: DEFAULT_QUERY,
+      isLoading: false
+    }
 
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this)
     this.setSearchTopStories = this.setSearchTopStories.bind(this)
@@ -30,7 +36,7 @@ class App extends Component {
     this.onDismiss = this.onDismiss.bind(this)
   }
 
-  needsToSearchTopStories(searchTerm){
+  needsToSearchTopStories(searchTerm) {
     return !this.state.results[searchTerm]
   }
 
@@ -42,11 +48,16 @@ class App extends Component {
       : []
     const updatedHits = [...oldHits, ...hits]
     this.setState({
-      results: {...results, [searchKey]: {hits: updatedHits, page}}
+      results: {
+        ...results,
+        [searchKey]: {hits: updatedHits, page},
+        isLoading: false
+      }
     })
   }
 
   fetchSearchTopStories(searchTerm, page) {
+    this.setState({isLoading: true})
     fetch(
       `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
     )
@@ -83,9 +94,9 @@ class App extends Component {
   }
 
   render() {
-    const {searchTerm, results, searchKey} = this.state
-    const page = (results && results[searchKey] && results[searchKey].page) || 0
-    const list = (results && results[searchKey] && results[searchKey].hits) || []
+    const {isLoading, searchTerm, results, searchKey} = this.state
+    const page = results && results[searchKey] && results[searchKey].page || 0
+    const list = results && results[searchKey] && results[searchKey].hits || []
     return (
       <div className="page">
         <div className="interactions">
@@ -99,11 +110,13 @@ class App extends Component {
         </div>
         <Table list={list} onDismiss={this.onDismiss} />
         <div className="interactions">
-          <Button
-            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
-          >
-            More
-          </Button>
+          {isLoading
+            ? <Loading />
+            : <Button
+                onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
+              >
+                More
+              </Button>}
         </div>
       </div>
     )
@@ -112,7 +125,7 @@ class App extends Component {
 
 const Search = ({children, onChange, value, onSubmit}) => (
   <form onSubmit={onSubmit}>
-    <input type="text" onChange={onChange} value={value} />
+     <input type="text" onChange={onChange} value={value} />
     <button type="submit">{children}</button>
   </form>
 )
@@ -152,5 +165,8 @@ const Button = ({onClick, className = '', children}) => (
   </button>
 )
 
+const Loading = () => <Icon spin size="3x" name="spinner" />
+
 export default App
+export {Button, Table, Search}
 
