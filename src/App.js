@@ -10,7 +10,7 @@ const smallColumn = {width: '10%'}
 
 const DEFAULT_QUERY = 'react'
 const DEFAULT_PAGE = 0
-const DEFAULT_HPP = '20'
+const DEFAULT_HPP = '8'
 
 const PATH_BASE = 'https://hn.algolia.com/api/v1'
 const PATH_SEARCH = '/search'
@@ -111,8 +111,8 @@ class App extends Component {
       results,
       searchKey
     } = this.state
-    const page = results && results[searchKey] && results[searchKey].page || 0
-    const list = results && results[searchKey] && results[searchKey].hits || []
+    const page = (results && results[searchKey] && results[searchKey].page) || 0
+    const list = (results && results[searchKey] && results[searchKey].hits) || []
     return (
       <div className="page">
         <div className="interactions">
@@ -127,7 +127,6 @@ class App extends Component {
         <Table
           list={list}
           onDismiss={this.onDismiss}
-          onSort={this.onSort}
         />
         <div className="interactions">
           <ButtonWithLoading
@@ -212,7 +211,7 @@ class Table extends Component {
               isSortReverse={isSortReverse}
             />
           </span>
-          <span style={smallColumn}>Archive</span>
+          <span style={smallColumn}>Hide</span>
         </div>
         {reverseSortedList.map(item => (
           <div key={item.objectID} className="table-row">
@@ -249,7 +248,7 @@ const Button = ({onClick, className = '', children}) => (
   </button>
 )
 
-const Loading = () => <Icon spin size="3x" name="spinner" />
+const Loading = () => (<Icon spin size="3x" name="spinner" />)
 
 const SortIcon = ({sortKey, isSortReverse, activeSortKey}) => {
   const sortName = classNames({
@@ -259,8 +258,9 @@ const SortIcon = ({sortKey, isSortReverse, activeSortKey}) => {
   return <Icon size="lg" name={sortName} />
 }
 
-const withLoading = Component =>
-  ({isLoading, ...rest}) => isLoading ? <Loading /> : <Component {...rest} />
+const withLoading = (Component) => ({isLoading, ...rest}) => (
+  isLoading ? <Loading /> : <Component {...rest} />
+)
 
 const ButtonWithLoading = withLoading(Button)
 
