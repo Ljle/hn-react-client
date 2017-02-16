@@ -46,7 +46,6 @@ class App extends Component {
     this.onDismiss = this.onDismiss.bind(this)
   }
 
-
   needsToSearchTopStories(searchTerm) {
     return !this.state.results[searchTerm]
   }
@@ -59,11 +58,8 @@ class App extends Component {
       : []
     const updatedHits = [...oldHits, ...hits]
     this.setState({
-      results: {
-        ...results,
-        [searchKey]: {hits: updatedHits, page},
-        isLoading: false
-      }
+      results: {...results, [searchKey]: {hits: updatedHits, page}},
+      isLoading: false
     })
   }
 
@@ -105,12 +101,7 @@ class App extends Component {
   }
 
   render() {
-    const {
-      isLoading,
-      searchTerm,
-      results,
-      searchKey
-    } = this.state
+    const {isLoading, searchTerm, results, searchKey} = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0
     const list = (results && results[searchKey] && results[searchKey].hits) || []
     return (
@@ -124,10 +115,7 @@ class App extends Component {
             Search
           </Search>
         </div>
-        <Table
-          list={list}
-          onDismiss={this.onDismiss}
-        />
+        <Table list={list} onDismiss={this.onDismiss} />
         <div className="interactions">
           <ButtonWithLoading
             isLoading={isLoading}
@@ -151,10 +139,7 @@ const Search = ({children, onChange, value, onSubmit}) => (
 class Table extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      sortKey: 'NONE',
-      isSortReverse: false
-    }
+    this.state = {sortKey: 'NONE', isSortReverse: false}
     this.onSort = this.onSort.bind(this)
   }
 
@@ -166,14 +151,18 @@ class Table extends Component {
 
   render() {
     const {list, onDismiss} = this.props
-    const { sortKey, isSortReverse } = this.state
+    const {sortKey, isSortReverse} = this.state
     const sortedList = SORTS[sortKey](list)
     const reverseSortedList = isSortReverse ? sortedList.reverse() : sortedList
     return (
       <div className="table">
         <div className="table-header">
           <span style={largeColumn}>
-            <Sort sortKey={'TITLE'} onSort={this.onSort} activeSortKey={sortKey}>
+            <Sort
+              sortKey={'TITLE'}
+              onSort={this.onSort}
+              activeSortKey={sortKey}
+            >
               Title
             </Sort>
             <SortIcon
@@ -183,7 +172,11 @@ class Table extends Component {
             />
           </span>
           <span style={midColumn}>
-            <Sort sortKey={'AUTHOR'} onSort={this.onSort} activeSortKey={sortKey}>
+            <Sort
+              sortKey={'AUTHOR'}
+              onSort={this.onSort}
+              activeSortKey={sortKey}
+            >
               Author
             </Sort>
             <SortIcon
@@ -192,7 +185,11 @@ class Table extends Component {
               isSortReverse={isSortReverse}
             />
           </span><span style={smallColumn}>
-            <Sort sortKey={'COMMENTS'} onSort={this.onSort} activeSortKey={sortKey}>
+            <Sort
+              sortKey={'COMMENTS'}
+              onSort={this.onSort}
+              activeSortKey={sortKey}
+            >
               Comments
             </Sort>
             <SortIcon
@@ -202,7 +199,11 @@ class Table extends Component {
             />
           </span>
           <span style={smallColumn}>
-            <Sort sortKey={'POINTS'} onSort={this.onSort} activeSortKey={sortKey}>
+            <Sort
+              sortKey={'POINTS'}
+              onSort={this.onSort}
+              activeSortKey={sortKey}
+            >
               Points
             </Sort>
             <SortIcon
@@ -248,7 +249,7 @@ const Button = ({onClick, className = '', children}) => (
   </button>
 )
 
-const Loading = () => (<Icon spin size="3x" name="spinner" />)
+const Loading = () => <Icon spin size="3x" name="spinner" />
 
 const SortIcon = ({sortKey, isSortReverse, activeSortKey}) => {
   const sortName = classNames({
@@ -258,9 +259,8 @@ const SortIcon = ({sortKey, isSortReverse, activeSortKey}) => {
   return <Icon size="lg" name={sortName} />
 }
 
-const withLoading = (Component) => ({isLoading, ...rest}) => (
-  isLoading ? <Loading /> : <Component {...rest} />
-)
+const withLoading = (Component) =>
+  ({isLoading, ...rest}) => isLoading ? <Loading /> : <Component {...rest} />
 
 const ButtonWithLoading = withLoading(Button)
 
