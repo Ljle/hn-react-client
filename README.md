@@ -1,1 +1,0 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app) as part of [Robin Wieruch](https://twitter.com/rwieruch)'s [The Road to Learn React](https://leanpub.com/the-road-to-learn-react) :closed_book:
