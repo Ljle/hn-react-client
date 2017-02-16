@@ -1,7 +1,7 @@
 body {
   color: #222;
   background: #f4f4f4;
-  font: 40014pxCoreSans, Arial, sans-serif;
+  font: Roboto
 }
 
 a {
@@ -24,16 +24,17 @@ input {
   border-radius: 5px;
   outline: none;
   margin-right: 10px;
-  border: 1pxsolid#dddddd;
+  border: 1px solid #dddddd;
 }
 
 button {
   padding: 10px;
   border-radius: 5px;
-  border: 1pxsolid#dddddd;
+  border: 1px solid #dddddd;
   background: transparent;
   color: #808080;
   cursor: pointer;
+  font-family: Roboto
 }
 
 button:hover {
